@@ -1,18 +1,13 @@
 import jwt from 'jsonwebtoken';
 import bcrytp from 'bcrypt';
-import { validationResult } from 'express-validator';
-import UserModel from './../models/User.js';
+import UserModel from '../models/User.js';
+import User from './../models/User.js';
 
 export const signup = async (req, res) => {
     try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json(errors.array());
-        }
-
-        const passwod = req.body.password;
+        const password = req.body.password;
         const salt = await bcrytp.genSalt(10);
-        const hash = await bcrytp.hash(passwod, salt);
+        const hash = await bcrytp.hash(password, salt);
 
         const doc = new UserModel({
             email: req.body.email,
